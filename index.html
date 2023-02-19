@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Form Input reservasi travel</h1>
+        <form method="get" action="output.html" novalidate class="needs-validation">
+        <div class="row g-3">
+            <div class="col-4">
+                <label for="kategori" class="form-table">Kategori</label>
+                <select class="form-select" name="kategori" id="kategori" required>
+                    <option value="">Kategori</option>
+                    <option>Reguler</option>
+                    <option>Premium</option>
+                        <div class="invalid-feedback">
+                            Valid kategori is required.
+                        </div>
+                </select>
+            </div>
+        
+            <div class="col-4">
+                <label for="jumlah-orang" class="form-table">Jumlah Orang</label>
+                <input type="number" id="jumlah-orang" name="jmh-orang" class="form-control" required>
+                    <div class="invalid-feedback">
+                    Valid Jumlah Orang is required.
+                  </div>
+            </div>
+            <div class="col-4">
+                <label for="input-tujuan">Pilih Tujuan</label>
+                <select class="form-select" name="pilih-tujuan" id="input-tujuan" required>
+                    <option value="">Pilih kategori terlebih dulu</option>
+                    <option></option>
+                    <option></option>
+                        <div class="invalid-feedback">
+                          Valid tujuan is required.
+                        </div>
+                </select>
+            </div>
+            <div class="col-6">
+                <label for="input-tujuan" class="form-label">Tujuan</label>
+                <select class="form-select" id="input-tujuan" name="input-tujuan" required>
+                  <option value="">Pick country first</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please provide a valid state.
+                </div>
+            </div>
+
+            <div class="button">
+                <button type="submit" class="btn btn-primary">Kirim</button>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="toggle-special" name="toggleSpecial">
+                <label class="form-check-label" for="toggle-special">Activate special option</label>
+              </div>
+  
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="enable-multiply" name="enableMultiply" disabled>
+                <label class="form-check-label" for="enable-multiply">Multiply chosen number by 100</label>
+              </div>
+
+              <!-- Modifikasi -->
+              <div id="premium-options" style="display: none;">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="additional-option" name="additionalOption">
+                  <label class="form-check-label" for="additional-option">Additional option</label>
+                </div>
+              </div>
+        </div>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+
+const kategori = document.getElementById('kategori');
+const tujuan = document.getElementById('input-tujuan');
+
+kategori.addEventListener('change', () => {
+  tujuan.innerHTML = '';
+  const selected = kategori.value;
+  if (selected === 'Reguler') {
+    addOption('Bandung');
+    addOption('Bogor');
+    addOption('Jakarta');
+    addOption('Tangerang');
+  } else if (selected === 'Premium') {
+    addOption('Australia');
+    addOption('Jepang');
+    addOption('Thailand');
+    addOption('Singapura');
+  }
+});
+
+function addOption(value) {
+  const option = document.createElement('option');
+  option.text = value;
+  option.value = value.toLowerCase();
+  tujuan.add(option);
+}
+
+const selectTujuan = document.getElementById('input-tujuan');
+const divCheckbox = document.createElement('div');
+divCheckbox.className = 'form-check';
+divCheckbox.innerHTML = `
+  <input type="checkbox" class="form-check-input" id="special-option" name="specialOption">
+  <label class="form-check-label" for="special-option">Special Option</label>
+`;
+
+// Tambahkan event listener untuk menangani perubahan nilai pada elemen "select"
+selectTujuan.addEventListener('change', function() {
+  // Dapatkan nilai yang dipilih pada elemen "select"
+  const selectedValue = this.value;
+  
+  // Jika nilai adalah "premium" dan belum ada checkbox tambahan, tambahkan checkbox
+  if (selectedValue === 'Premium' && !document.getElementById('special-option')) {
+    this.parentElement.appendChild(divCheckbox);
+  } 
+  // Jika nilai bukan "premium" dan ada checkbox tambahan, hapus checkbox
+  else if (selectedValue !== 'Premium' && document.getElementById('special-option')) {
+    document.getElementById('special-option').parentElement.remove();
+  }
+});
+    //     function setTujuanOptions(kategori){
+    //         const options = []
+
+    //         switch (kategori){
+    //             case 'Reguler' : options.push('Bandung', 'Bogor', 'Jakarta', 'Tangerang'); break;
+    //             case 'Premium' : options.push('Australia', 'Jepang', 'Thailand', 'Singapura'); break;
+    //             default : options.push('Pilih kategori terlebih dulu')
+    //         }
+
+    //         const tujuanElement = document.getElementById('input-tujuan')
+    //         while (tujuanElement.firstChild){
+    //             tujuanELement.firstChild.remove()
+    //         }
+    //         for (let option of option){
+    //             const optionElement=document.createElement('option')
+    //             optionElement.innerHTML = option
+    //             if (option === 'Pilih kategori terlebih dulu') optionElement.value =''
+    //             tujuanElement.appendChild(optionElement)
+    //         }
+    //     }
+
+    //     document.getElementById('input-kategori').addEventListener('change',setFields)
+
+    //     function toggleCheckbox() {
+    //   const toggle = document.getElementById('toggle-special');
+    //   const enableMultiply = document.getElementById('enable-multiply');
+
+    //   enableMultiply.disabled = !toggle.checked;
+    //   if (!toggle.checked) enableMultiply.checked = false;
+    // }
+
+    // document.getElementById('input-tujuan').addEventListener('change', getStates);
+    // document.getElementById('toggle-special').addEventListener('change', toggleCheckbox);
+    </script>
+</body>
+</html>
